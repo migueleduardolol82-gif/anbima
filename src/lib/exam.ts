@@ -44,16 +44,26 @@ export function scoreAttempt(
 ): Attempt {
   const moduleStats: Attempt["moduleStats"] = {};
   let correct = 0;
+  let wrong = 0;
+  let unanswered = 0;
   for (const question of questions) {
-    const hit = answers[question.id] === question.correctIndex;
+    const response = answers[question.id];
+    const wasAnswered = response !== undefined;
+    const hit = wasAnswered && response === question.correctIndex;
     if (hit) correct += 1;
-    moduleStats[question.module] ??= { correct: 0, total: 0 };
+    else if (wasAnswered) wrong += 1;
+    else unanswered += 1;
+    moduleStats[question.module] ??= { correct: 0, wrong: 0, unanswered: 0, total: 0 };
     moduleStats[question.module].total += 1;
     if (hit) moduleStats[question.module].correct += 1;
+    else if (wasAnswered) moduleStats[question.module].wrong += 1;
+    else moduleStats[question.module].unanswered += 1;
   }
   return {
     ...meta,
     correct,
+    wrong,
+    unanswered,
     total: questions.length,
     percentage: questions.length ? Math.round((correct / questions.length) * 100) : 0,
     answers,

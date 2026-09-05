@@ -34,6 +34,8 @@ describe("fluxo principal", () => {
     await screen.findByText(/questão 1 de 40/i);
     fireEvent.click(screen.getByRole("button", { name: /finalizar simulado agora/i }));
     expect(await screen.findByText(/simulado concluído/i)).toBeTruthy();
+    expect(screen.getByText("Erros respondidos").nextElementSibling?.textContent).toBe("0");
+    expect(screen.getByText("Não respondidas").nextElementSibling?.textContent).toBe("40");
     await waitFor(() => expect(JSON.parse(localStorage.getItem("anbima-cpro-attempts") ?? "[]")).toHaveLength(1));
   });
 });

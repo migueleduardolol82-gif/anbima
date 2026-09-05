@@ -8,6 +8,7 @@ export interface Question {
   module: string;
   format: QuestionFormat;
   difficulty: "Fácil" | "Médio" | "Difícil";
+  cognitiveLevel: "Aplicação" | "Análise";
   context: string;
   dialogue?: { speaker: string; text: string }[];
   prompt: string;
@@ -31,10 +32,12 @@ export interface Attempt {
   finishedAt: string;
   durationSeconds: number;
   correct: number;
+  wrong: number;
+  unanswered: number;
   total: number;
   percentage: number;
   answers: Record<string, number>;
   correctAnswers: Record<string, number>;
   questionIds: string[];
-  moduleStats: Record<string, { correct: number; total: number }>;
+  moduleStats: Record<string, { correct: number; wrong: number; unanswered: number; total: number }>;
 }
